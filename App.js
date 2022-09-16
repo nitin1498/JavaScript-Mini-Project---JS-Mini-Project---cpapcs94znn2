@@ -8,7 +8,7 @@ let score = 0;
 let lastPaintTime = 0;
 let snakeArr = [{ x: 13, y: 15 }];
 
-food = { x: 6, y: 7 };
+let food = { x: 6, y: 7 };
 
 function main(ctime) {
 	window.requestAnimationFrame(main);
@@ -20,6 +20,12 @@ function main(ctime) {
 }
 
 function gameEngine() {
+	for (let i = snakeArr.length - 2; i >= 0; i--) {
+		snakeArr[i + 1] = { ...snakeArr[i] };
+	}
+
+	snakeArr[0].x += inputDir.x;
+	snakeArr[0].y += inputDir.y;
 
 	board.innerHTML = "";
 	snakeArr.forEach((e, index) => {
@@ -43,3 +49,30 @@ function gameEngine() {
 }
 
 window.requestAnimationFrame(main);
+window.addEventListener("keydown", (e) => {
+	inputDir = { x: 0, y: 1 };
+	moveSound.play();
+	switch (e.key) {
+		case "ArrowUp":
+			inputDir.x = 0;
+			inputDir.y = -1;
+			break;
+
+		case "ArrowDown":
+			inputDir.x = 0;
+			inputDir.y = 1;
+			break;
+
+		case "ArrowLeft":
+			inputDir.x = -1;
+			inputDir.y = 0;
+			break;
+
+		case "ArrowRight":
+			inputDir.x = 1;
+			inputDir.y = 0;
+			break;
+		default:
+			break;
+	}
+});
