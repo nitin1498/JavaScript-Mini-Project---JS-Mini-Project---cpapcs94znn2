@@ -7,7 +7,7 @@ let speed = 2;
 let score = 0;
 let lastPaintTime = 0;
 let snakeArr = [{ x: 13, y: 15 }];
-
+let hiscoreval = 0;
 let food = { x: 6, y: 7 };
 
 function main(ctime) {
@@ -39,7 +39,7 @@ function isCollide(snake) {
 
 function gameEngine() {
 	if (isCollide(snakeArr)) {
-		gameOverSound.play();  
+		gameOverSound.play();
 		inputDir = { x: 0, y: 0 };
 		alert("Game Over. Press any key to play again!");
 		snakeArr = [{ x: 13, y: 15 }];
@@ -48,6 +48,11 @@ function gameEngine() {
 
 	if (snakeArr[0].y === food.y && snakeArr[0].x === food.x) {
 		score += 1;
+        if(score>hiscoreval){
+            hiscoreval = score;
+            localStorage.setItem("hiscore", JSON.stringify(hiscoreval));
+            hiscoreBox.innerHTML = "HiScore: " + hiscoreval;
+        }
 		scoreBox.innerHTML = "Score: " + score;
 		snakeArr.unshift({
 			x: snakeArr[0].x + inputDir.x,
@@ -89,6 +94,15 @@ function gameEngine() {
 	board.appendChild(foodElement);
 }
 
+let hiscore = localStorage.getItem("hiscore");
+if(hiscore === null){
+    hiscoreval = 0;
+    localStorage.setItem("hiscore", JSON.stringify(hiscoreval))
+}
+else{
+    hiscoreval = JSON.parse(hiscore);
+    hiscoreBox.innerHTML = "HiScore: " + hiscore;
+}
 window.requestAnimationFrame(main);
 window.addEventListener("keydown", (e) => {
 	inputDir = { x: 0, y: 1 };
